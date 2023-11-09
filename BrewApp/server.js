@@ -3,10 +3,11 @@ const app = express();
 const mongoose = require('mongoose');
 
 
-mongoose.connect('process.env.MONGODB_URI', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -53,10 +54,13 @@ app.post('/books', async (req, res) => {
   }
 });
 
+
+
+
 app.get('/books/:id', async (req, res) => {
   try {
-    const id = req.params.id; 
-    const book = await Book.findById(id).exec(); 
+    const bookId = req.params.id; 
+    const book = await Book.findById(bookId).exec(); 
 
     if (!book) {
       res.status(404).json({ message: "Book not found" });
@@ -106,7 +110,8 @@ app.delete('/books/:id', async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 6000;
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
